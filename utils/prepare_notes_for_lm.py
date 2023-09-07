@@ -37,7 +37,7 @@ class LMTextData:
         test_sample_size=100,
         chunk_size=128,
         seed=41,
-        text_col=TEXT,
+        text_col=None,
     ):
         self.admin_language = admin_language
         self.sample = sample
@@ -163,8 +163,6 @@ class LMTextData:
                 f"{self.save_path}/test_all_text_{self.test_sample_size}.txt"
             )
             # now load in the dataframe
-            #ToDO: add capability for more than one training file
-
             training_notes_temps = []
             for file in self.training_notes_path:
                 train_notes_file = pd.read_csv(
