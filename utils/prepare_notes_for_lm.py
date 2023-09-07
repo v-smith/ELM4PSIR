@@ -249,7 +249,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Required parameters
-    parser.add_argument("--train_test_notes_path", nargs='+', help="The path to the folder with data files"
+    parser.add_argument("--train_test_notes_path", type=str, help="The path to the folder with data files"
                         )
     parser.add_argument(
         "--save_path",
