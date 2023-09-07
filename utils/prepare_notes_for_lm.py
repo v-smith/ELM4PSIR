@@ -1,8 +1,10 @@
 import argparse
+import glob
 import os
 import re
 import time
 import warnings
+import random
 from typing import List
 
 import pandas as pd
@@ -24,11 +26,12 @@ python prepare_notes_for_lm.py --sample --train_sample_size 1000
 """
 
 
+
 class LMTextData:
     def __init__(
             self,
-            training_notes_path=None,
-            test_notes_path=None,
+            train_test_notes_path=None,
+            num_files_for_training=None,
             save_path=None,
             admin_language=None,
             replacement_map=None,
@@ -44,8 +47,8 @@ class LMTextData:
         self.sample = sample
         self.train_sample_size = train_sample_size
         self.test_sample_size = test_sample_size
-        self.training_notes_path = training_notes_path
-        self.test_notes_path = test_notes_path
+        self.train_test_notes_path = train_test_notes_path
+        self.num_files_for_training = num_files_for_training
         self.save_path = save_path
         self.admin_language = admin_language
         self.chunk_size = chunk_size
@@ -138,6 +141,17 @@ class LMTextData:
 
         return filtered_df.dropna()
 
+    def combine_input_files(self, filenames):
+        dfs_list = []
+        for file in filenames:
+            df = pd.read_csv(
+                file, nrows=self.train_sample_size
+            )
+            dfs_list.append(df)
+        combined_dfs = pd.concat(dfs_list, axis=0)
+
+        return combined_dfs
+
     def read_write_all_text(self):
         """
         Function to read in and clean text files in preparation for transformer based
@@ -152,7 +166,7 @@ class LMTextData:
         # TODO - refactor to just do both train and test in one run without these
         # extra arguments for whether or not it is training or test data
 
-        logger.info(f"working on training data: {self.training_notes_path}")
+        logger.info(f"working on training data: {self.train_test_notes_path}")
         if self.sample:
             logger.info("Will be sampling the datasets")
 
@@ -164,35 +178,25 @@ class LMTextData:
                 f"{self.save_path}/test_all_text_{self.test_sample_size}.txt"
             )
             # now load in the dataframe
-            training_notes_temps = []
-            for file in self.training_notes_path:
-                train_notes_file = pd.read_csv(
-                    file, nrows=self.train_sample_size
-                )
-                training_notes_temps.append(train_notes_file)
-            train_notes_temp = pd.concat([training_notes_temps], axis=0)
-
-            test_notes_temp = pd.read_csv(
-                self.test_notes_path, nrows=self.test_sample_size
-            )
+            filenames = glob.glob(self.train_test_notes_path + "/*.csv")
+            train_filenames = random.choices(filenames, k=self.num_files_for_training)
+            train_notes_temp = self.combine_input_files(filenames=train_filenames)
+            test_filenames = [x for x in filenames if x not in train_filenames]
+            test_notes_temp = self.combine_input_files(filenames=test_filenames)
         else:
             train_save_path = f"{self.save_path}/training_all_text.txt"
             test_save_path = f"{self.save_path}/test_all_text.txt"
 
-            # train_notes_temp = pd.read_csv(self.training_notes_path)
-            #vicky
-            training_notes_temps = []
-            counter = 1
-            for file in self.training_notes_path:
-                counter += 1
-                df = pd.read_csv(
-                    file, nrows=self.train_sample_size
-                )
-                training_notes_temps.append(df)
-            train_notes_temp = pd.concat(training_notes_temps, axis=0, ignore_index=True)
+            filenames = glob.glob(self.train_test_notes_path + "/*.csv")
+            train_filenames = random.choices(filenames, k=self.num_files_for_training)
+            train_notes_temp = self.combine_input_files(filenames=train_filenames)
+            test_filenames = [x for x in filenames if x not in train_filenames]
+            test_notes_temp = self.combine_input_files(filenames=test_filenames)
 
-            test_notes_temp = pd.read_csv(self.test_notes_path)
 
+        train_filename_roots = [os.path.basename(x) for x in train_filenames]
+        test_filename_roots = [os.path.basename(x) for x in test_filenames]
+        print(f"For training using {self.num_files_for_training} files: {train_filename_roots} \n For test using files: {test_filename_roots}")
         logger.info(
             (
                 f"Size of training notes data is: {train_notes_temp.shape} and test "
@@ -245,8 +249,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Required parameters
-    parser.add_argument("-tp",
-                        "--training_notes_path", nargs='+', help="The path to the training data files"
+    parser.add_argument("--train_test_notes_path", nargs='+', help="The path to the folder with data files"
                         )
     parser.add_argument(
         "--save_path",
@@ -254,9 +257,9 @@ def main():
         help="The directory to save processed and cleaned data files",
     )
     parser.add_argument(
-        "--test_notes_path",
-        type=str,
-        help="The data path to the file containing patient cohort data file",
+        "--num_files_for_training",
+        type=int,
+        help="The number of files in your split data folder to use for training (the rest are used for test)",
     )
 
     parser.add_argument(
