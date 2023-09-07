@@ -180,13 +180,16 @@ class LMTextData:
             test_save_path = f"{self.save_path}/test_all_text.txt"
 
             # train_notes_temp = pd.read_csv(self.training_notes_path)
+            #vicky
             training_notes_temps = []
+            counter = 1
             for file in self.training_notes_path:
-                train_notes_file = pd.read_csv(
+                counter += 1
+                df = pd.read_csv(
                     file, nrows=self.train_sample_size
                 )
-                training_notes_temps.append(train_notes_file)
-            train_notes_temp = pd.concat([training_notes_temps], axis=0)
+                training_notes_temps.append(df)
+            train_notes_temp = pd.concat(training_notes_temps, axis=0, ignore_index=True)
 
             test_notes_temp = pd.read_csv(self.test_notes_path)
 
