@@ -38,7 +38,7 @@ class LMTextData:
         test_sample_size=100,
         chunk_size=128,
         seed=41,
-        text_col=TEXT,
+        text_col=None,
     ):
         self.admin_language = admin_language
         self.sample = sample
@@ -318,7 +318,7 @@ def main():
 
     parser.add_argument(
         "--text_col",
-        default="text",
+        default="TEXT",
         type=str,
         help="The name of the column with the text data in",
     )
