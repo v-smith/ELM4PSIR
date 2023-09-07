@@ -477,6 +477,7 @@ def main():
         logging_first_step=True,
         logging_strategy="steps",
         logging_dir=f"{logging_dir}/",
+        fp16=True
     )
 
     # set up the trainer
