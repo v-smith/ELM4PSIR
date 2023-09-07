@@ -9,8 +9,6 @@ flake8
 funcsigs==1.0.2
 gensim==4.2.0
 isort
-jupyter
-jupyterlab
 loguru==0.6.0
 nlp==0.4.0
 nltk

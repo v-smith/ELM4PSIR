@@ -37,7 +37,7 @@ class LMTextData:
         test_sample_size=100,
         chunk_size=128,
         seed=41,
-        text_col=None,
+        text_col=TEXT,
     ):
         self.admin_language = admin_language
         self.sample = sample
@@ -163,10 +163,17 @@ class LMTextData:
                 f"{self.save_path}/test_all_text_{self.test_sample_size}.txt"
             )
             # now load in the dataframe
+            #ToDO: add capability for more than one training file
 
-            train_notes_temp = pd.read_csv(
-                self.training_notes_path, nrows=self.train_sample_size
-            )
+            training_notes_temps = []
+            for file in self.training_notes_path:
+                train_notes_file = pd.read_csv(
+                    file, nrows=self.train_sample_size
+                )
+                training_notes_temps.append(train_notes_temp)
+            train_notes_temp = pd.concat([training_notes_temps], axis=0)
+
+
             test_notes_temp = pd.read_csv(
                 self.test_notes_path, nrows=self.test_sample_size
             )
@@ -276,7 +283,6 @@ def main():
             ("  ", " "),
             ('"', ""),
             ("-", " "),
-            ("pt", "patient"),
         ],
         type=list,
         help=(
