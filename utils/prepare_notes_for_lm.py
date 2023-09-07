@@ -147,8 +147,10 @@ class LMTextData:
             df = pd.read_csv(
                 file, nrows=self.train_sample_size
             )
+            print(len(df.index))
             dfs_list.append(df)
-        combined_dfs = pd.concat(dfs_list, axis=0)
+        combined_dfs = pd.concat(dfs_list, axis=0, ignore_index=True)
+        print(combined_dfs.shape)
 
         return combined_dfs
 
