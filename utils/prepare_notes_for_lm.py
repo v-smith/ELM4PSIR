@@ -26,19 +26,19 @@ python prepare_notes_for_lm.py --sample --train_sample_size 1000
 
 class LMTextData:
     def __init__(
-        self,
-        training_notes_path=None,
-        test_notes_path=None,
-        save_path=None,
-        admin_language=None,
-        replacement_map=None,
-        remove_punctuation=True,
-        sample=True,
-        train_sample_size=500,
-        test_sample_size=100,
-        chunk_size=128,
-        seed=41,
-        text_col=None,
+            self,
+            training_notes_path=None,
+            test_notes_path=None,
+            save_path=None,
+            admin_language=None,
+            replacement_map=None,
+            remove_punctuation=True,
+            sample=True,
+            train_sample_size=500,
+            test_sample_size=100,
+            chunk_size=128,
+            seed=41,
+            text_col=None,
     ):
         self.admin_language = admin_language
         self.sample = sample
@@ -64,17 +64,17 @@ class LMTextData:
     # define a chunk function for each long text
 
     def chunks(self, sentence, chunk):
-        return [sentence[i : i + chunk] for i in range(0, len(sentence), chunk)]
+        return [sentence[i: i + chunk] for i in range(0, len(sentence), chunk)]
 
     # --------------------------------------------------------------------------------
 
     def clean_data(
-        self,
-        admin_language,
-        notes_df: pd.DataFrame,
-        min_tokens=5,
-        replacement_map=None,
-        remove_punctuation=False,
+            self,
+            admin_language,
+            notes_df: pd.DataFrame,
+            min_tokens=5,
+            replacement_map=None,
+            remove_punctuation=False,
     ) -> pd.DataFrame:
         """
          TODO - add function to allow mapping of known acronyms to full words
@@ -172,7 +172,6 @@ class LMTextData:
                 training_notes_temps.append(train_notes_file)
             train_notes_temp = pd.concat([training_notes_temps], axis=0)
 
-
             test_notes_temp = pd.read_csv(
                 self.test_notes_path, nrows=self.test_sample_size
             )
@@ -180,7 +179,7 @@ class LMTextData:
             train_save_path = f"{self.save_path}/training_all_text.txt"
             test_save_path = f"{self.save_path}/test_all_text.txt"
 
-            #train_notes_temp = pd.read_csv(self.training_notes_path)
+            # train_notes_temp = pd.read_csv(self.training_notes_path)
             training_notes_temps = []
             for file in self.training_notes_path:
                 train_notes_file = pd.read_csv(
@@ -243,9 +242,9 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Required parameters
-    parser.add_argument(
-        "--training_notes_path", nargs='+', type=List, help="The path to the training data files"
-    )
+    parser.add_argument("-tp",
+                        "--training_notes_path", nargs='+', help="The path to the training data files"
+                        )
     parser.add_argument(
         "--save_path",
         type=str,
