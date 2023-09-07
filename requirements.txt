@@ -1,6 +1,5 @@
 black
 bokeh==2.4.3
-checklist==0.0.11
 datasets==2.4.0
 d3blocks
 evaluate
