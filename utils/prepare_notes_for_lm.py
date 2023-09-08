@@ -181,7 +181,11 @@ class LMTextData:
             )
             # now load in the dataframe
             filenames = glob.glob(self.train_test_notes_path + "/*.csv")
-            train_filenames = random.sample(filenames, k=self.num_files_for_training, )
+            #train_filenames = random.sample(filenames, k=self.num_files_for_training, )
+            if self.num_files_for_training < (len(filenames)-1):
+                train_filenames = filenames[:self.num_files_for_training]
+            else:
+                raise Exception("Num_files_for_training includes all files, no data for Test")
             train_notes_temp = self.combine_input_files(filenames=train_filenames)
             test_filenames = [x for x in filenames if x not in train_filenames]
             test_notes_temp = self.combine_input_files(filenames=test_filenames)
@@ -190,7 +194,11 @@ class LMTextData:
             test_save_path = f"{self.save_path}/test_all_text.txt"
 
             filenames = glob.glob(self.train_test_notes_path + "/*.csv")
-            train_filenames = random.sample(filenames, k=self.num_files_for_training)
+            #train_filenames = random.sample(filenames, k=self.num_files_for_training)
+            if self.num_files_for_training < (len(filenames)-1):
+                train_filenames = filenames[:self.num_files_for_training]
+            else:
+                raise Exception("Num_files_for_training includes all files, no data for Test")
             train_notes_temp = self.combine_input_files(filenames=train_filenames)
             test_filenames = [x for x in filenames if x not in train_filenames]
             test_notes_temp = self.combine_input_files(filenames=test_filenames)
@@ -312,13 +320,13 @@ def main():
     )
     parser.add_argument(
         "--train_sample_size",
-        default=10,
+        default=120000,
         type=int,
         help="The sample size to use when subsetting training data",
     )
     parser.add_argument(
         "--test_sample_size",
-        default=10,
+        default=120000,
         type=int,
         help="The sample size to use when subsetting test data",
     )
