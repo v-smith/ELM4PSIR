@@ -182,7 +182,7 @@ class LMTextData:
             # now load in the dataframe
             filenames = glob.glob(self.train_test_notes_path + "/*.csv")
             #train_filenames = random.sample(filenames, k=self.num_files_for_training, )
-            if self.num_files_for_training < (len(filenames)-1):
+            if self.num_files_for_training < len(filenames):
                 train_filenames = filenames[:self.num_files_for_training]
             else:
                 raise Exception("Num_files_for_training includes all files, no data for Test")
@@ -195,7 +195,7 @@ class LMTextData:
 
             filenames = glob.glob(self.train_test_notes_path + "/*.csv")
             #train_filenames = random.sample(filenames, k=self.num_files_for_training)
-            if self.num_files_for_training < (len(filenames)-1):
+            if self.num_files_for_training < len(filenames):
                 train_filenames = filenames[:self.num_files_for_training]
             else:
                 raise Exception("Num_files_for_training includes all files, no data for Test")
