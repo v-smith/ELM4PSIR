@@ -320,13 +320,13 @@ def main():
     )
     parser.add_argument(
         "--train_sample_size",
-        default=120000,
+        default=None,
         type=int,
         help="The sample size to use when subsetting training data",
     )
     parser.add_argument(
         "--test_sample_size",
-        default=120000,
+        default=None,
         type=int,
         help="The sample size to use when subsetting test data",
     )
