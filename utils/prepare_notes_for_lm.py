@@ -156,10 +156,12 @@ class LMTextData:
             )
             print(len(df.index))
             dfs_list.append(df)
-        combined_dfs = pd.concat(dfs_list, axis=0, ignore_index=True)
-        print(combined_dfs.shape)
-
-        return combined_dfs
+        if dfs_list > 1:
+            combined_dfs = pd.concat(dfs_list, axis=0, ignore_index=True)
+            print(combined_dfs.shape)
+            return combined_dfs
+        else:
+            return dfs_list[0]
 
     def read_write_all_text(self):
         """
