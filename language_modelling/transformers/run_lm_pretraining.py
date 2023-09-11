@@ -45,6 +45,10 @@ Provide training and test data paths to your own data
 - allenai/biomed_roberta_base
 
 facebooks bio-lms: github.com/facebookresearch/bio-lm
+
+
+# vicky run training 
+python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data" --test_text_data_path "data" --max_steps 100000 --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --logging_dir "logs"
 """
 
 

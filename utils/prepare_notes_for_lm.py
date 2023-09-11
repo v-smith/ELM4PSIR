@@ -23,6 +23,13 @@ Example usage from cmd line for sampling:
 python prepare_notes_for_lm.py --sample --train_sample_size 1000
  --test_sample_size 100
 ```
+
+#vicky prepare all notes
+#5fold
+python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/5fold --save_path ../data/ --num_files_for_training 4
+
+#10fold
+python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold --save_path ../data/ --num_files_for_training 4
 """
 
 
@@ -187,7 +194,7 @@ class LMTextData:
             else:
                 raise Exception("Num_files_for_training includes all files, no data for Test")
             train_notes_temp = self.combine_input_files(filenames=train_filenames)
-            test_filenames = [x for x in filenames if x not in train_filenames]
+            test_filenames = [x for x in filenames if x not in train_filenames][0]
             test_notes_temp = self.combine_input_files(filenames=test_filenames)
         else:
             train_save_path = f"{self.save_path}/training_all_text.txt"
@@ -200,7 +207,7 @@ class LMTextData:
             else:
                 raise Exception("Num_files_for_training includes all files, no data for Test")
             train_notes_temp = self.combine_input_files(filenames=train_filenames)
-            test_filenames = [x for x in filenames if x not in train_filenames]
+            test_filenames = [x for x in filenames if x not in train_filenames][0]
             test_notes_temp = self.combine_input_files(filenames=test_filenames)
 
 
