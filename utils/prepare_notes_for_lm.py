@@ -156,7 +156,7 @@ class LMTextData:
             )
             print(len(df.index))
             dfs_list.append(df)
-        if dfs_list > 1:
+        if len(dfs_list) > 1:
             combined_dfs = pd.concat(dfs_list, axis=0, ignore_index=True)
             print(combined_dfs.shape)
             return combined_dfs
