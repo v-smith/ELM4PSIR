@@ -196,8 +196,10 @@ class LMTextData:
             else:
                 raise Exception("Num_files_for_training includes all files, no data for Test")
             train_notes_temp = self.combine_input_files(filenames=train_filenames)
-            test_filenames = list([x for x in filenames if x not in train_filenames][0])
-            test_notes_temp = self.combine_input_files(filenames=test_filenames)
+            test_filenames = [x for x in filenames if x not in train_filenames][0]
+            #test_notes_temp = self.combine_input_files(filenames=test_filenames)
+            test_notes_temp = pd.read_csv(test_filenames, nrows=self.train_sample_size)
+            print(len(test_notes_temp .index))
         else:
             train_save_path = f"{self.save_path}/training_all_text.txt"
             test_save_path = f"{self.save_path}/test_all_text.txt"
@@ -209,8 +211,10 @@ class LMTextData:
             else:
                 raise Exception("Num_files_for_training includes all files, no data for Test")
             train_notes_temp = self.combine_input_files(filenames=train_filenames)
-            test_filenames = list([x for x in filenames if x not in train_filenames][0])
-            test_notes_temp = self.combine_input_files(filenames=test_filenames)
+            test_filenames = [x for x in filenames if x not in train_filenames][0]
+            #test_notes_temp = self.combine_input_files(filenames=test_filenames)
+            test_notes_temp = pd.read_csv(test_filenames, nrows=self.train_sample_size)
+            print(len(test_notes_temp.index))
 
 
         train_filename_roots = [os.path.basename(x) for x in train_filenames]
