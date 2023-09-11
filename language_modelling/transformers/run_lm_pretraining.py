@@ -48,7 +48,9 @@ facebooks bio-lms: github.com/facebookresearch/bio-lm
 
 
 # vicky run training 
-python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data" --test_text_data_path "data" --max_steps 100000 --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --logging_dir "logs"
+python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data" --test_text_data_path "data" --max_steps 100000 --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --logging_dir "logs" --save_path ../pretrained-models/RoBERTa-base-Mimic-full/
+
+python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data/10fold" --test_text_data_path "data/10fold" --max_steps 100000 --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --logging_dir "logs" --save_path ../pretrained-models/RoBERTa-base-Mimic-half/
 """
 
 
@@ -85,7 +87,7 @@ def main():
 
     parser.add_argument(
         "--cache_dir",
-        default=None,
+        default="cache",
         type=str,
         help=(
             "The directory to save and subsequently load all transformer downloaded "

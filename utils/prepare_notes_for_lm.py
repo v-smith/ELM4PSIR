@@ -26,10 +26,10 @@ python prepare_notes_for_lm.py --sample --train_sample_size 1000
 
 #vicky prepare all notes
 #5fold
-python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/5fold --save_path ../data/ --num_files_for_training 4
+python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/5fold --save_path ../data/5fold/ --num_files_for_training 4
 
 #10fold
-python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/ --save_path ../data/ --num_files_for_training 4
+python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/ --save_path ../data/10fold/ --num_files_for_training 4
 """
 
 
@@ -156,12 +156,9 @@ class LMTextData:
             )
             print(len(df.index))
             dfs_list.append(df)
-        if len(dfs_list) > 1:
-            combined_dfs = pd.concat(dfs_list, axis=0, ignore_index=True)
-            print(combined_dfs.shape)
-            return combined_dfs
-        else:
-            return dfs_list[0]
+        combined_dfs = pd.concat(dfs_list, axis=0, ignore_index=True)
+        print(combined_dfs.shape)
+        return combined_dfs
 
     def read_write_all_text(self):
         """
