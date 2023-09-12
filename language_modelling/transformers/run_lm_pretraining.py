@@ -48,9 +48,14 @@ facebooks bio-lms: github.com/facebookresearch/bio-lm
 
 
 # vicky run training 
+#full dataset 
 python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data" --test_text_data_path "data" --max_steps 100000 --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --logging_dir "logs" --save_path ../pretrained-models/RoBERTa-base-Mimic-full/
 
-python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data/10fold" --test_text_data_path "data/10fold" --max_steps 100000 --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --logging_dir "logs" --save_path ../pretrained-models/RoBERTa-base-Mimic-half/
+#50% of dataset
+python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data/10fold/1b" --test_text_data_path "data/10fold/1b" --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --save_path ../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/
+
+#test locally
+
 """
 
 
@@ -66,6 +71,7 @@ def main():
             "training data"
         ),
     )
+
     parser.add_argument(
         "--test_text_data_path",
         type=str,
@@ -123,7 +129,7 @@ def main():
     )
     parser.add_argument(
         "--max_steps",
-        default=200000,
+        default=-1,
         type=int,
         help="The max number of training steps before the trainer will terminate",
     )
@@ -246,8 +252,9 @@ def main():
         help=(
             "Whether or not to process a sub sample of the data - primarily for dev "
             "purposes"
-        ),
+        )
     )
+
 
     args = parser.parse_args()
 
@@ -468,6 +475,7 @@ def main():
     training_args = TrainingArguments(
         output_dir=f"{save_path}/",
         max_steps=args.max_steps,
+        num_train_epochs=1,
         per_device_train_batch_size=args.train_batch_size,
         per_device_eval_batch_size=args.eval_batch_size,
         learning_rate=args.learning_rate,
