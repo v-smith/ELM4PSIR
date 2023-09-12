@@ -30,7 +30,7 @@ python prepare_notes_for_lm.py --sample --train_sample_size 1000
 python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/5fold --save_path ../data/5fold/ --num_files_for_training 4
 
 #10fold
-python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/ --save_path ../data/10fold/ --num_files_for_training 4
+python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path ../data/10fold/1b --num_files_for_training 4
 """
 
 
@@ -174,7 +174,7 @@ class LMTextData:
             file_types = [".csv", ".arrow"]
             for file_type in file_types:
                 if file.endswith(file_type):
-                    filenames.append(file)
+                    filenames.append(os.path.join(self.train_test_notes_path, file))
 
         filenames = sorted(filenames)
         if self.num_files_for_training < len(filenames):
