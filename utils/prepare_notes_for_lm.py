@@ -30,14 +30,18 @@ python prepare_notes_for_lm.py --sample --train_sample_size 1000
 python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/5fold --save_path ../data/5fold/ --num_files_for_training 4
 
 #10fold
-python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path ../data/10fold/1b --num_files_for_training 4
+python utils/prepare_notes_for_lm.py --train_test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b --num_files_for_training 4
+
+#10fold MinHash
+python utils/prepare_notes_for_lm.py --train_test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --save_path data/10fold/1b/minhash/ --num_files_for_training 2
 """
 
 
 class LMTextData:
     def __init__(
             self,
-            train_test_notes_path=None,
+            train_notes_path=None,
+            test_notes_path=None,
             input_file_type="csv",
             num_files_for_training=None,
             save_path=None,
@@ -55,7 +59,8 @@ class LMTextData:
         self.sample = sample
         self.train_sample_size = train_sample_size
         self.test_sample_size = test_sample_size
-        self.train_test_notes_path = train_test_notes_path
+        self.train_notes_path = train_notes_path
+        self.test_notes_path = test_notes_path
         self.num_files_for_training = num_files_for_training
         self.input_file_type = input_file_type
         self.save_path = save_path
@@ -169,27 +174,30 @@ class LMTextData:
         return combined_dfs
 
     def load_dataset(self):
-        filenames = []
-        for file in sorted(os.listdir(self.train_test_notes_path)):
-            file_types = [".csv", ".arrow"]
-            for file_type in file_types:
-                if file.endswith(file_type):
-                    filenames.append(os.path.join(self.train_test_notes_path, file))
-
-        filenames = sorted(filenames)
-        if self.num_files_for_training < len(filenames):
-            train_filenames = filenames[:self.num_files_for_training]
+        if self.input_file_type == "arrow":
+            train_filenames = glob.glob(self.train_notes_path + "\*.arrow")
+            train_notes_temp = self.combine_input_train_files(filenames=train_filenames)
+            test_filenames = glob.glob(self.test_notes_path + "\*.csv")
+            test_filenames = sorted(test_filenames)
+            test_filename = test_filenames[4]
+            test_notes_temp = pd.read_csv(test_filename, nrows=self.train_sample_size)
         else:
-            raise Exception("Num_files_for_training includes all files, no data for test")
-        train_notes_temp = self.combine_input_train_files(filenames=train_filenames)
-        test_filenames = [x for x in filenames if x not in train_filenames][0]
-        test_notes_temp = pd.read_csv(test_filenames, nrows=self.train_sample_size)
-        print(len(test_notes_temp.index))
+            filenames = glob.glob(self.train_notes_path + "\*.csv")
+            filenames = sorted(filenames)
+            if self.num_files_for_training < len(filenames):
+                train_filenames = filenames[:self.num_files_for_training]
+            else:
+                raise Exception("Num_files_for_training includes all files, no data for test")
+            train_notes_temp = self.combine_input_train_files(filenames=train_filenames)
+            test_filenames = [x for x in filenames if x not in train_filenames]
+            test_filename = test_filenames[0]
+            test_notes_temp = pd.read_csv(test_filename, nrows=self.train_sample_size)
+            print(len(test_notes_temp.index))
 
         train_filename_roots = [os.path.basename(x) for x in train_filenames]
-        test_filename_roots = [os.path.basename(x) for x in test_filenames]
+        test_filename_roots = os.path.basename(test_filename)
         print(
-            f"For training using {self.num_files_for_training} files: {train_filename_roots} \n For test using files: {test_filename_roots}")
+            f"For training using {self.num_files_for_training} files: {train_filename_roots} \n For test using file: {test_filename_roots}")
 
         return train_notes_temp, test_notes_temp
 
@@ -278,7 +286,10 @@ def main():
     parser = argparse.ArgumentParser()
 
     # Required parameters
-    parser.add_argument("--train_test_notes_path", type=str, help="The path to the folder with data files"
+    parser.add_argument("--train_notes_path", type=str, help="The path to the folder with training data files"
+                        )
+
+    parser.add_argument("--test_notes_path", type=str, help="The path to the folder with test data files"
                         )
 
     parser.add_argument(

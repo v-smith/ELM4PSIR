@@ -54,7 +54,11 @@ python language_modelling/transformers/run_lm_pretraining.py --training_text_dat
 #50% of dataset
 python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data/10fold/1b" --test_text_data_path "data/10fold/1b" --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --save_path ../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/
 
-#test locally
+#minhash 50% of dataset 
+python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data/10fold/1b/minhash" --test_text_data_path "data/10fold/1b/minhash" --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --save_path ../pretrained-models/RoBERTa-base-MimicMinHashed-half-1_epoch/
+
+#suffix array 50% of dataset
+ 
 
 """
 
