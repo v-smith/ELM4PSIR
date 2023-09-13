@@ -33,7 +33,10 @@ python prepare_notes_for_lm.py --train_notes_path ../../mimic/files/clinical-ber
 python utils/prepare_notes_for_lm.py --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b --num_files_for_training 4
 
 #10fold MinHash
-python utils/prepare_notes_for_lm.py --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b/minhash/ --num_files_for_training 2
+python utils/prepare_notes_for_lm.py --input_file_type "arrow" --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b/minhash/
+
+#10fold SuffixArray
+python utils/prepare_notes_for_lm.py --input_file_type "arrow" --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b/minhash/
 """
 
 
@@ -179,7 +182,7 @@ class LMTextData:
             train_notes_temp = self.combine_input_train_files(filenames=train_filenames)
             test_filenames = glob.glob(self.test_notes_path + "/*.csv")
             test_filenames = sorted(test_filenames)
-            test_filename = test_filenames[4]
+            test_filename = test_filenames[5]
             test_notes_temp = pd.read_csv(test_filename, nrows=self.train_sample_size)
         else:
             filenames = glob.glob(self.train_notes_path + "*.csv")
