@@ -27,13 +27,13 @@ python prepare_notes_for_lm.py --sample --train_sample_size 1000
 
 #vicky prepare all notes
 #5fold
-python prepare_notes_for_lm.py --train_test_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/5fold --save_path ../data/5fold/ --num_files_for_training 4
+python prepare_notes_for_lm.py --train_notes_path ../../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/5fold --save_path ../data/5fold/ --num_files_for_training 4
 
 #10fold
-python utils/prepare_notes_for_lm.py --train_test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b --num_files_for_training 4
+python utils/prepare_notes_for_lm.py --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b --num_files_for_training 4
 
 #10fold MinHash
-python utils/prepare_notes_for_lm.py --train_test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --save_path data/10fold/1b/minhash/ --num_files_for_training 2
+python utils/prepare_notes_for_lm.py --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b/minhash/ --num_files_for_training 2
 """
 
 
@@ -175,14 +175,14 @@ class LMTextData:
 
     def load_dataset(self):
         if self.input_file_type == "arrow":
-            train_filenames = glob.glob(self.train_notes_path + "\*.arrow")
+            train_filenames = glob.glob(self.train_notes_path + "/*.arrow")
             train_notes_temp = self.combine_input_train_files(filenames=train_filenames)
-            test_filenames = glob.glob(self.test_notes_path + "\*.csv")
+            test_filenames = glob.glob(self.test_notes_path + "/*.csv")
             test_filenames = sorted(test_filenames)
             test_filename = test_filenames[4]
             test_notes_temp = pd.read_csv(test_filename, nrows=self.train_sample_size)
         else:
-            filenames = glob.glob(self.train_notes_path + "\*.csv")
+            filenames = glob.glob(self.train_notes_path + "*.csv")
             filenames = sorted(filenames)
             if self.num_files_for_training < len(filenames):
                 train_filenames = filenames[:self.num_files_for_training]
@@ -215,7 +215,7 @@ class LMTextData:
         # TODO - refactor to just do both train and test in one run without these
         # extra arguments for whether or not it is training or test data
 
-        logger.info(f"working on training data: {self.train_test_notes_path}")
+        logger.info(f"working on training data: {self.train_notes_path}")
         if self.sample:
             logger.info("Will be sampling the datasets")
 
