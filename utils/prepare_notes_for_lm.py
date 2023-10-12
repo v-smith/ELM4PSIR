@@ -36,7 +36,7 @@ python utils/prepare_notes_for_lm.py --train_notes_path ../mimic/files/clinical-
 python utils/prepare_notes_for_lm.py --input_file_type "arrow" --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b/minhash/
 
 #10fold SuffixArray
-python utils/prepare_notes_for_lm.py --input_file_type "arrow" --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/minhash/10fold/1b --test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b/minhash/
+python utils/prepare_notes_for_lm.py --input_file_type "arrow" --train_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/suffix_array/10fold/1b --test_notes_path ../mimic/files/clinical-bert-mimic-notes/setup_outputs/split/10fold/1b --save_path data/10fold/1b/suffix_array/
 """
 
 

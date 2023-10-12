@@ -100,8 +100,8 @@ class IncidentDataset(Dataset):
     def __getitem__(self, index: int):
         data_row = self.data.iloc[index]
 
-        all_text = data_row["text"]
-        labels = data_row["label"]
+        all_text = data_row["TEXT"]
+        labels = data_row["Label"]
         # encoding = self.tokenizer.encode_plus(
         #   all_text,
         #   add_special_tokens=True,

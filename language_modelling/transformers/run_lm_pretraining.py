@@ -47,7 +47,7 @@ Provide training and test data paths to your own data
 facebooks bio-lms: github.com/facebookresearch/bio-lm
 
 
-# vicky run training 
+#vicky run training 
 #full dataset 
 python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data" --test_text_data_path "data" --max_steps 100000 --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --logging_dir "logs" --save_path ../pretrained-models/RoBERTa-base-Mimic-full/
 
@@ -58,7 +58,9 @@ python language_modelling/transformers/run_lm_pretraining.py --training_text_dat
 python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data/10fold/1b/minhash" --test_text_data_path "data/10fold/1b/minhash" --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --save_path ../pretrained-models/RoBERTa-base-MimicMinHashed-half-1_epoch/
 
 #suffix array 50% of dataset
- 
+python language_modelling/transformers/run_lm_pretraining.py --training_text_data_path "data/10fold/1b/suffix_array" --test_text_data_path "data/10fold/1b/suffix_array" --save_every_steps 500 --eval_every_steps 500  --mlm --cache_dir "cache" --save_path ../pretrained-models/RoBERTa-base-MimicSuffixArray-half-1_epoch/
+
+#SemDeDup 50% of dataset
 
 """
 

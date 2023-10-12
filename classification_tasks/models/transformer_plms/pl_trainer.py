@@ -78,6 +78,29 @@ python pl_trainer.py --model_type customclassifier --encoder_model roberta-base
 --batch_size 8 --gpu_idx 0 --training_size fewshot --few_shot_n 7000
 --dataset severity --binary_class_transform --nr_frozen_epochs 99 --max_epochs 30`
 
+
+########### vicky ##############
+python pl_trainer.py \
+--model_type autoforsequence \
+--encoder_model ../../../../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/roberta-base-custom/12-09-2023--15-28/checkpoint-10000 \
+--batch_size 8 \
+--gpu_idx 0 \
+--training_size fewshot \
+--few_shot_n 7000 \
+--eval_few_shot_n 7000 \
+--data_dir ../../../../clinicalBERT/data/discharge \
+--dataset discharge \
+--text_col "TEXT" \
+--label_col "Label" \
+--binary_class_transform \
+--nr_frozen_epochs 99 \
+--max_epochs 30 \
+--cache_dir cache \
+--log_save_dir logs \
+--ckpt_save_dir ../../../../finetuned_model/RoBERTa-base-Mimic-half-1_epoch_Discharge 
+
+
+
 """
 
 
@@ -88,7 +111,24 @@ python pl_trainer.py --model_type customclassifier --encoder_model roberta-base
 
 def get_class_weights(train_df, label_col):
     """
-    Function to compute class weights for cross entropy loss in the case of imbalanced
+    Function to compute class weights for cross entropy loss in the case of imbalancedpython pl_trainer.py \
+--model_type autoforsequence \
+--encoder_model ../../../../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/roberta-base-custom/12-09-2023--15-28/checkpoint-10000 \
+--batch_size 8 \
+--gpu_idx 0 \
+--training_size fewshot \
+--few_shot_n 7000 \
+--eval_few_shot_n 7000 \
+--data_dir ../../../../clinicalBERT/data/discharge \
+--dataset discharge \
+--text_col "TEXT" \
+--label_col "Label" \
+--binary_class_transform \
+--nr_frozen_epochs 99 \
+--max_epochs 30 \
+--cache_dir cache \
+--log_save_dir logs \
+--ckpt_save_dir ../../../../finetuned_model/RoBERTa-base-Mimic-half-1_epoch_Discharge
     datasets i.e. to penalize model that overfits to majority class
     """
     classes = list(train_df[label_col].unique())
@@ -133,7 +173,7 @@ def main():
     )
     parser.add_argument(
         "--validation_file",
-        default="valid.csv",
+        default="val.csv",
         type=str,
         help="The default name of the training file",
     )
