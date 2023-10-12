@@ -100,8 +100,8 @@ class IncidentDataset(Dataset):
     def __getitem__(self, index: int):
         data_row = self.data.iloc[index]
 
-        all_text = data_row["TEXT"]
-        labels = data_row["Label"]
+        all_text = data_row["text"]
+        labels = data_row["label"]
         # encoding = self.tokenizer.encode_plus(
         #   all_text,
         #   add_special_tokens=True,
@@ -719,8 +719,6 @@ class IncidentModel(pl.LightningModule):
                     "lr": self.encoder_learning_rate,
                 },
             ]
-
-        print(f"{self.optimizer}")
 
         if self.optimizer == "adamw":
             optimizer = AdamW(parameters, lr=self.classifier_learning_rate)

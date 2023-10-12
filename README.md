@@ -87,7 +87,7 @@ When training on GPU machines, the appropriate PyTorch bundle should be installe
 ```{bash}
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 ```
-
+y
 #### spaCy NLP
 
 A few of the projects will benefit from using [spaCy](https://spacy.io/). To use spacy you have to:

@@ -83,7 +83,7 @@ python pl_trainer.py --model_type customclassifier --encoder_model roberta-base
 #../../../../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/roberta-base-custom/12-09-2023--15-28/checkpoint-10000
 python pl_trainer.py \
 --model_type autoforsequence \
---encoder_model roberta-base \
+--encoder_model ../../../../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/roberta-base-custom/12-09-2023--15-28/checkpoint-10000 \
 --batch_size 8 \
 --gpu_idx 0 \
 --training_size fewshot \
@@ -91,8 +91,6 @@ python pl_trainer.py \
 --eval_few_shot_n 7000 \
 --data_dir ../../../../clinicalBERT/data/discharge \
 --dataset discharge \
---text_col TEXT \
---label_col Label \
 --nr_frozen_epochs 99 \
 --max_epochs 30 \
 --cache_dir cache \
@@ -659,19 +657,17 @@ def main():
         logger.warning(f"Using the following dataset: {args.dataset} ")
 
         train_df = all_training_data.copy()
-
-        # First we work on training data to generate class_labels which will come in
-        # handly for certain plots etc. assign to label column and substract 1 from
-        # all label values to 0 index and drop rest
-        #train_df["Label"] = train_df[args.dataset] - 1
         train_df = train_df[["TEXT", "Label"]]
+        train_df.rename(columns={'TEXT': 'text', 'Label': 'label'}, inplace=True)
 
         # now create the val/test dfs
         valid_df = all_validation_data.copy()
         valid_df = valid_df[["TEXT", "Label"]]
+        valid_df.rename(columns={'TEXT': 'text', 'Label': 'label'}, inplace=True)
 
         test_df = all_test_data.copy()
         test_df = test_df[["TEXT", "Label"]]
+        test_df.rename(columns={'TEXT': 'text', 'Label': 'label'}, inplace=True)
 
         # get class label encodings based on training data
         class_labels, idx_to_class, class_to_idx = encode_classes(
