@@ -92,7 +92,6 @@ python pl_trainer.py \
 --dataset discharge \
 --text_col "TEXT" \
 --label_col "Label" \
---binary_class_transform \
 --nr_frozen_epochs 99 \
 --max_epochs 30 \
 --cache_dir cache \
@@ -111,24 +110,7 @@ python pl_trainer.py \
 
 def get_class_weights(train_df, label_col):
     """
-    Function to compute class weights for cross entropy loss in the case of imbalancedpython pl_trainer.py \
---model_type autoforsequence \
---encoder_model ../../../../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/roberta-base-custom/12-09-2023--15-28/checkpoint-10000 \
---batch_size 8 \
---gpu_idx 0 \
---training_size fewshot \
---few_shot_n 7000 \
---eval_few_shot_n 7000 \
---data_dir ../../../../clinicalBERT/data/discharge \
---dataset discharge \
---text_col "TEXT" \
---label_col "Label" \
---binary_class_transform \
---nr_frozen_epochs 99 \
---max_epochs 30 \
---cache_dir cache \
---log_save_dir logs \
---ckpt_save_dir ../../../../finetuned_model/RoBERTa-base-Mimic-half-1_epoch_Discharge
+    Function to compute class weights for cross entropy loss in the case of imbalanced
     datasets i.e. to penalize model that overfits to majority class
     """
     classes = list(train_df[label_col].unique())
@@ -671,6 +653,37 @@ def main():
         test_df = test_df[["text", "label"]]
         # map int classes to their idx to keep within the 0-Nclass range
         test_df["label"] = test_df["label"].map(class_to_idx)
+
+    elif args.dataset == "discharge":
+        logger.warning(f"Using the following dataset: {args.dataset} ")
+
+        train_df = all_training_data.copy()
+
+        # First we work on training data to generate class_labels which will come in
+        # handly for certain plots etc. assign to label column and substract 1 from
+        # all label values to 0 index and drop rest
+        #train_df["Label"] = train_df[args.dataset] - 1
+        train_df = train_df[["TEXT", "Label"]]
+
+        # now create the val/test dfs
+        valid_df = all_validation_data.copy()
+        #valid_df["Label"] = (valid_df[args.dataset] - 1)  # the original labels were 1:N. But most neural network loss functions expect 0:N
+        valid_df = valid_df[["TEXT", "Label"]]
+
+        test_df = all_test_data.copy()
+        #test_df["label"] = (test_df[args.dataset] - 1)  # the original labels were 1:N. But most neural network loss functions expect 0:N
+        test_df = test_df[["TEXT", "Label"]]
+
+        # get class label encodings based on training data
+        class_labels, idx_to_class, class_to_idx = encode_classes(
+            df=train_df, meta_df=None, label_col="label"
+        )
+        logger.warning(
+            (
+                f"Class labels: {class_labels}\n\nidx_to_class:{idx_to_class}\n\n"
+                f"class_to_idx:{class_to_idx}"
+            )
+        )
 
     else:
         # TODO implement other datasets
