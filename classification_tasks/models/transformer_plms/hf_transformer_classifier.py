@@ -720,7 +720,7 @@ class IncidentModel(pl.LightningModule):
                 },
             ]
 
-        if self.optimizer == "adamw":
+        if self.optimizer == "AdamW":
             optimizer = AdamW(parameters, lr=self.classifier_learning_rate)
             scheduler = get_linear_schedule_with_warmup(
                 optimizer,
