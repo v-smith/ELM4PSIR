@@ -658,16 +658,16 @@ def main():
 
         train_df = all_training_data.copy()
         train_df = train_df[["TEXT", "Label"]]
-        train_df.rename(columns={'TEXT': 'text', 'Label': 'label'}, inplace=True)
+        train_df = train_df.rename(columns={'TEXT': 'text', 'Label': 'label'})
 
         # now create the val/test dfs
         valid_df = all_validation_data.copy()
         valid_df = valid_df[["TEXT", "Label"]]
-        valid_df.rename(columns={'TEXT': 'text', 'Label': 'label'}, inplace=True)
+        valid_df= valid_df.rename(columns={'TEXT': 'text', 'Label': 'label'})
 
         test_df = all_test_data.copy()
         test_df = test_df[["TEXT", "Label"]]
-        test_df.rename(columns={'TEXT': 'text', 'Label': 'label'}, inplace=True)
+        test_df = test_df.rename(columns={'TEXT': 'text', 'Label': 'label'})
 
         # get class label encodings based on training data
         class_labels, idx_to_class, class_to_idx = encode_classes(
