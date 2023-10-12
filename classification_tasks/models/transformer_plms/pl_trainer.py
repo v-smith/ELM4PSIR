@@ -671,7 +671,7 @@ def main():
 
         # get class label encodings based on training data
         class_labels, idx_to_class, class_to_idx = encode_classes(
-            df=train_df, meta_df=None, label_col="Label"
+            df=train_df, meta_df=None, label_col="label"
         )
         logger.warning(
             (
