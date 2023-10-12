@@ -720,7 +720,7 @@ class IncidentModel(pl.LightningModule):
                 },
             ]
 
-        print(self.optimizer)
+        print(f"{self.optimizer}")
 
         if self.optimizer == "adamw":
             optimizer = AdamW(parameters, lr=self.classifier_learning_rate)
