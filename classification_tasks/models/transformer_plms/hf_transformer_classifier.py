@@ -329,17 +329,17 @@ class IncidentModel(pl.LightningModule):
                 param.requires_grad = False
         self._frozen = True
 
-    def freeze_n_layers(model, freeze_layer_count=0) -> None:
+    def freeze_n_layers(self, freeze_layer_count=0) -> None:
         """freeze N last layers of a transformer model"""
         # first freeze the embedding layer - we do this regardless
-        for param in model.base_model.embeddings.parameters():
+        for param in self.model.base_model.embeddings.parameters():
             param.requires_grad = False
         # if the freeze layer count is 0 - do nothing and leave requires_grad = True
 
-        if freeze_layer_count > model.config.num_hidden_layers:
+        if freeze_layer_count > self.model.config.num_hidden_layers:
             print(
                 f"""The freeze_layer_count provided:{freeze_layer_count}
-            is higher than the number of layers the model has: {model.config.num_hidden_layers}!
+            is higher than the number of layers the model has: {self.model.config.num_hidden_layers}!
             """
             )
         else:
@@ -347,12 +347,12 @@ class IncidentModel(pl.LightningModule):
                 if freeze_layer_count != -1:
                     # if freeze_layer_count == -1, we freeze all of em
                     # otherwise we freeze the first `freeze_layer_count` encoder layers
-                    for layer in model.base_model.encoder.layer[:freeze_layer_count]:
+                    for layer in self.model.base_model.encoder.layer[:freeze_layer_count]:
                         for param in layer.parameters():
                             param.requires_grad = False
                 else:
                     # freeze all layers
-                    for layer in model.base_model.encoder.layer:
+                    for layer in self.model.base_model.encoder.layer:
                         for param in layer.parameters():
                             param.requires_grad = False
 

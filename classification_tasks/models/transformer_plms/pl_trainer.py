@@ -80,9 +80,10 @@ python pl_trainer.py --model_type customclassifier --encoder_model roberta-base
 
 
 ########### vicky ##############
+#../../../../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/roberta-base-custom/12-09-2023--15-28/checkpoint-10000
 python pl_trainer.py \
 --model_type autoforsequence \
---encoder_model ../../../../pretrained-models/RoBERTa-base-Mimic-half-1_epoch/roberta-base-custom/12-09-2023--15-28/checkpoint-10000 \
+--encoder_model roberta-base \
 --batch_size 8 \
 --gpu_idx 0 \
 --training_size fewshot \
