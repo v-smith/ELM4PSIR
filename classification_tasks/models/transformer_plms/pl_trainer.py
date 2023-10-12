@@ -90,8 +90,8 @@ python pl_trainer.py \
 --eval_few_shot_n 7000 \
 --data_dir ../../../../clinicalBERT/data/discharge \
 --dataset discharge \
---text_col "TEXT" \
---label_col "Label" \
+--text_col TEXT \
+--label_col Label \
 --nr_frozen_epochs 99 \
 --max_epochs 30 \
 --cache_dir cache \
@@ -667,16 +667,14 @@ def main():
 
         # now create the val/test dfs
         valid_df = all_validation_data.copy()
-        #valid_df["Label"] = (valid_df[args.dataset] - 1)  # the original labels were 1:N. But most neural network loss functions expect 0:N
         valid_df = valid_df[["TEXT", "Label"]]
 
         test_df = all_test_data.copy()
-        #test_df["label"] = (test_df[args.dataset] - 1)  # the original labels were 1:N. But most neural network loss functions expect 0:N
         test_df = test_df[["TEXT", "Label"]]
 
         # get class label encodings based on training data
         class_labels, idx_to_class, class_to_idx = encode_classes(
-            df=train_df, meta_df=None, label_col="label"
+            df=train_df, meta_df=None, label_col="Label"
         )
         logger.warning(
             (
